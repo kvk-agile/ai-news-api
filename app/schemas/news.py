@@ -1,0 +1,1 @@
+# Shared NewsItem Pydantic schema
