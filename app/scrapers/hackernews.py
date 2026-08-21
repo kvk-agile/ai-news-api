@@ -1,7 +1,10 @@
+from datetime import datetime, timezone
 from pathlib import Path
 import re
 import requests
 import trafilatura
+
+from app.schemas.news import NewsItem
 
 TOP_STORIES_URL = "https://hacker-news.firebaseio.com/v0/topstories.json"
 ITEM_URL = "https://hacker-news.firebaseio.com/v0/item/{}.json"
@@ -51,23 +54,20 @@ for story_id in story_ids:
     if not content:
         continue
 
-    filename = f"{saved + 1}_{safe_filename(title)}.txt"
-    filepath = OUTPUT_DIR / filename
-
-    # Save metadata + article text
-    filepath.write_text(
-        f"""Title: {title}
-URL: {url}
-Author: {story.get("by")}
-Score: {story.get("score")}
-Type: {story.get("type")}
-
---- ARTICLE CONTENT ---
-
-{content}
-""",
-        encoding="utf-8"
+    # Normalize into the canonical NewsItem shape
+    news_item = NewsItem(
+        source="hackernews",
+        source_id=str(story_id),
+        title=title,
+        url=url,
+        author=story.get("by"),
+        content=content,
+        scraped_at=datetime.now(timezone.utc),
     )
+
+    filename = f"{saved + 1}_{safe_filename(title)}.json"
+    filepath = OUTPUT_DIR / filename
+    filepath.write_text(news_item.model_dump_json(indent=2), encoding="utf-8")
 
     print(f"Saved: {filepath}")
     saved += 1

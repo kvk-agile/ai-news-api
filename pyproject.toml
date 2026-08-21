@@ -5,6 +5,7 @@ requires-python = ">=3.11"
 dependencies = [
     "dotenv>=0.9.9",
     "openai>=3.3.1",
+    "pydantic>=2.13.4",
     "requests>=2.34.2",
     "trafilatura>=2.2.0",
 ]
