@@ -19,7 +19,6 @@ class NewsItem(BaseModel):
 
     # Populated later by LLM enrichment
     summary: str | None = None
-    category: str | None = None
     tags: list[str] = []
 
 
