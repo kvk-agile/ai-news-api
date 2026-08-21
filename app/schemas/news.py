@@ -21,3 +21,10 @@ class NewsItem(BaseModel):
     summary: str | None = None
     category: str | None = None
     tags: list[str] = []
+
+
+class ArticleEnrichment(BaseModel):
+    """Structured LLM output produced from an article's title and content."""
+
+    summary: str
+    tags: list[str]

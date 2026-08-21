@@ -3,23 +3,36 @@
 We are building an AI News API.
 
 The application:
-- collects AI news from multiple sources
+- collects news from external sources
 - normalizes all sources into one NewsItem format
-- enriches news using an LLM
-- stores results in PostgreSQL
-- exposes stored news through FastAPI
+- enriches articles with an LLM
+- stores data in PostgreSQL
+- exposes both structured and semantic search through FastAPI
 
 # Workflow
 
-External Sources
-→ Scrapers
-→ Normalization
-→ LLM Enrichment
+External Sources  
+→ Scrapers  
+→ Normalization  
+→ LLM Enrichment  
 → PostgreSQL
-→ FastAPI
 
-The batch pipeline writes news to PostgreSQL.
-The FastAPI service reads news from PostgreSQL.
+From PostgreSQL, users can query data in two ways:
+
+1. Structured API
+   - filter news by fields such as source, topic or date
+   - examples: GET /news, GET /news?topic=agents
+
+2. Semantic / RAG API
+   - chunk article content
+   - create embeddings
+   - store vectors with pgvector
+   - retrieve relevant chunks with semantic search
+   - optionally use an LLM to answer questions
+   - examples: GET /search, POST /ask
+
+The batch pipeline writes data.  
+FastAPI reads and serves stored data.
 
 # Technology
 
@@ -28,72 +41,20 @@ The FastAPI service reads news from PostgreSQL.
 - OpenAI API
 - FastAPI
 - SQLAlchemy
-- PostgreSQL
+- PostgreSQL + pgvector
 - Docker
 - uv
 - Render
 
 # Project Structure
 
-ai-news-api/
-│
-├── app/                         # Our application code
-│
-│   ├── main.py                  # Start the API and listen for requests
-│   ├── pipeline.py              # Run the daily news collection pipeline
-│   ├── config.py                # Load API keys and app settings
-│   │
-│   ├── api/                     # Let other apps access our news
-│   │   └── routes/
-│   │       ├── news.py          # Endpoints like GET /news
-│   │       └── health.py        # Check that the API is running
-│   │
-│   ├── scrapers/                # Collect news from external sources
-│   │   ├── base.py              # Common rules for all scrapers
-│   │   ├── openai.py            # Collect OpenAI news
-│   │   ├── anthropic.py         # Collect Anthropic news
-│   │   └── youtube.py           # Collect YouTube content
-│   │
-│   ├── agents/                  # Use AI to understand/enrich news
-│   │   └── news_agent.py        # Generate summaries and topics
-│   │
-│   ├── services/                # Coordinate the application's workflows
-│   │   ├── ingestion.py         # Scrape, normalize and save new news
-│   │   └── enrichment.py        # Enrich saved news using the LLM
-│   │
-│   ├── database/                # Store and retrieve news
-│   │   ├── connection.py        # Connect Python to PostgreSQL
-│   │   ├── models.py            # Define database tables
-│   │   └── repository.py        # Read/write news in the database
-│   │
-│   └── schemas/                 # Define our common data format
-│       └── news.py              # Define what a NewsItem looks like
-│
-├── tests/                       # Check that the application works
-│
-├── Dockerfile                   # Package our Python app for deployment
-├── docker-compose.yml           # Run app + PostgreSQL locally
-├── render.yaml                  # Tell Render what cloud services to create
-├── .env.example                 # Show which secrets/settings are required
-├── pyproject.toml               # Python dependencies and project config
-└── README.md                    # Explain how to run/use the project
-
-# Responsibilities
-
-- main.py: FastAPI application entry point
-- pipeline.py: batch ingestion/enrichment entry point
-- api/: HTTP endpoints
-- scrapers/: retrieve external data
-- agents/: LLM logic
-- services/: application workflows
-- database/: database connection, models and queries
-- schemas/: shared Pydantic schemas
+text ai-news-api/ ├── app/ │   ├── main.py                  # Start FastAPI │   ├── pipeline.py              # Run news processing pipeline │   ├── config.py                # Settings and environment variables │   ├── api/                     # HTTP endpoints │   ├── scrapers/                # Collect external news │   ├── agents/                  # LLM logic │   ├── services/                # Coordinate workflows │   ├── database/                # Store/query PostgreSQL │   └── schemas/                 # Shared data models ├── tests/ ├── Dockerfile ├── docker-compose.yml ├── render.yaml ├── .env.example ├── pyproject.toml └── README.md 
 
 # Principles
 
-- Keep the project simple.
+- Keep the project simple and build incrementally.
 - Use one canonical NewsItem schema.
 - Keep scraping, LLM, database and API logic separate.
-- The API should not scrape news during a request.
-- Build incrementally.
-
+- The API should query stored data, not scrape during requests.
+- Use PostgreSQL for both structured data and vector search.
+- Do not add tools or frameworks unless they solve a clear requirement.
