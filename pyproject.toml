@@ -2,4 +2,8 @@
 name = "ai-news-api"
 version = "0.1.0"
 requires-python = ">=3.11"
-dependencies = []
+dependencies = [
+    "openai>=3.3.1",
+    "pydantic>=2.13.4",
+    "python-dotenv>=1.2.3",
+]
