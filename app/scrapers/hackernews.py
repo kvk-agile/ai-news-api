@@ -8,7 +8,7 @@ TOP_STORIES_URL = "https://hacker-news.firebaseio.com/v0/topstories.json"
 ITEM_URL = "https://hacker-news.firebaseio.com/v0/item/{}.json"
 
 
-def scrape_top_stories(limit: int = 5) -> list[NewsItem]:
+def scrape_top_stories(limit: int = 6) -> list[NewsItem]:
     """Scrape the top Hacker News stories and normalize them into NewsItems."""
 
     story_ids = requests.get(TOP_STORIES_URL, timeout=10).json()
