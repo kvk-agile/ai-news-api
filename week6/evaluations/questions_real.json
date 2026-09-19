@@ -1,0 +1,81 @@
+[
+  {
+    "id": "aftermath_announcement_date",
+    "question": "On what date did OpenAI announce its Navier-Stokes result?",
+    "answer_type": "text",
+    "expected_answer": "September 8th",
+    "accepted_answers": [
+      "September 8",
+      "8 September"
+    ],
+    "source_id": "49679637",
+    "evidence_phrase": "September 8th, 2026"
+  },
+  {
+    "id": "aftermath_buckmaster",
+    "question": "Who called the announcement a 'Deep Blue-Kasparov moment'?",
+    "answer_type": "text",
+    "expected_answer": "Tristan Buckmaster",
+    "accepted_answers": [
+      "Buckmaster"
+    ],
+    "source_id": "49679637",
+    "evidence_phrase": "Deep Blue"
+  },
+  {
+    "id": "aftermath_millennium",
+    "question": "The Navier-Stokes problem is one of how many Millennium Prize Problems?",
+    "answer_type": "number",
+    "expected_answer": "seven",
+    "source_id": "49679637",
+    "evidence_phrase": "seven Millennium Prize Problems"
+  },
+  {
+    "id": "agents_training_stages",
+    "question": "In how many stages does the author say these models are trained?",
+    "answer_type": "number",
+    "expected_answer": "two",
+    "source_id": "49678969",
+    "evidence_phrase": "trained in two stages"
+  },
+  {
+    "id": "agents_rl_regimes",
+    "question": "How many kinds of trial-and-error training regimes does the author list?",
+    "answer_type": "number",
+    "expected_answer": "three",
+    "source_id": "49678969",
+    "evidence_phrase": "three kinds of regimes"
+  },
+  {
+    "id": "agents_consciousness",
+    "question": "True or false: the author claims these systems have subjective experiences.",
+    "answer_type": "boolean",
+    "expected_answer": "false",
+    "source_id": "49678969",
+    "evidence_phrase": "subjective experiences"
+  },
+  {
+    "id": "aligned_prompt_quote",
+    "question": "What example prompt does the author give of a drastically unspecified task?",
+    "answer_type": "text",
+    "expected_answer": "make me $1B make no mistakes",
+    "source_id": "49679643",
+    "evidence_phrase": "make no mistakes"
+  },
+  {
+    "id": "aligned_unhackable",
+    "question": "True or false: the author says an unhackable grader exists.",
+    "answer_type": "boolean",
+    "expected_answer": "false",
+    "source_id": "49679643",
+    "evidence_phrase": "unhackable grader"
+  },
+  {
+    "id": "aligned_thanks",
+    "question": "Who is thanked for the AI Punnett square?",
+    "answer_type": "text",
+    "expected_answer": "Karan Lyons",
+    "source_id": "49679643",
+    "evidence_phrase": "Karan Lyons"
+  }
+]

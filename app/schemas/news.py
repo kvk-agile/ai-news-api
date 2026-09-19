@@ -45,7 +45,7 @@ class AskRequest(BaseModel):
     """A question to answer from semantically retrieved news chunks."""
 
     question: str = Field(min_length=1)
-    limit: int = Field(default=5, ge=1, le=10)
+    limit: int = Field(default=8, ge=1, le=10)
 
 
 class AnswerCitation(BaseModel):
@@ -61,6 +61,7 @@ class AnswerCitation(BaseModel):
 class GroundedAnswer(BaseModel):
     """Structured answer generated only from retrieved context."""
 
+    evidence: str
     answer: str
     supported: bool
 

@@ -21,10 +21,13 @@ def answer_from_context(question: str, contexts: list[str]) -> GroundedAnswer:
         model=ANSWER_MODEL,
         instructions=(
             "Answer only from the supplied context. Do not use outside knowledge. "
+            "First, copy into the evidence field the exact sentence from the context "
+            "that answers the question, word for word. Then write the answer, "
+            "based only on that sentence. "
             "For a numeric question, return only the number and requested unit. "
             "For a true/false question, start the answer with 'true' or 'false'. "
-            "If the context does not contain enough evidence, set supported to false "
-            "and answer 'Not enough information'."
+            "If the context does not contain enough evidence, set evidence to an "
+            "empty string, set supported to false, and answer 'Not enough information'."
         ),
         input=f"Question: {question}\n\nContext:\n{numbered_context}",
         text_format=GroundedAnswer,
