@@ -2,7 +2,7 @@
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.orm import Session
 
-from app.database.models import NewsItemModel
+from app.database.models import NewsItemModel, NewsChunkModel
 from app.schemas.news import NewsItem
 
 
@@ -59,3 +59,39 @@ def save_enrichment(db: Session, item_id: int, summary: str, tags: list[str]) ->
     db.commit()
     db.refresh(row)
     return row
+
+
+def get_unindexed_news_items(db: Session) -> list[NewsItemModel]:
+    """Return news items that don't have any chunks yet."""
+    indexed_ids = db.query(NewsChunkModel.news_item_id).distinct()
+    return (
+        db.query(NewsItemModel)
+        .filter(NewsItemModel.id.notin_(indexed_ids))
+        .all()
+    )
+
+
+def insert_news_chunks(db: Session, news_item_id: int, chunks: list[dict]) -> None:
+    """Save a list of chunks (with embeddings) for a news item."""
+    for chunk in chunks:
+        row = NewsChunkModel(
+            news_item_id=news_item_id,
+            chunk_index=chunk["chunk_index"],
+            content=chunk["content"],
+            embedding=chunk["embedding"],
+        )
+        db.add(row)
+
+    db.commit()
+
+
+def search_similar_chunks(db: Session, query_embedding: list[float], limit: int = 5) -> list[tuple[NewsChunkModel, float]]:
+    """Return (chunk, similarity_score) pairs, most similar first."""
+    similarity = NewsChunkModel.embedding.max_inner_product(query_embedding)
+    return (
+        db.query(NewsChunkModel, similarity.label("similarity"))
+        .order_by(similarity)
+        .limit(limit)
+        .all()
+    )
+
